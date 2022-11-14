@@ -2,9 +2,6 @@ package org.eclipse.scout.contacts.client.organization;
 
 import org.eclipse.scout.contacts.client.common.CountryLookupCall;
 import org.eclipse.scout.contacts.client.organization.OrganizationTablePage.Table;
-import org.eclipse.scout.contacts.client.organization.OrganizationTablePage.Table.HomepageColumn;
-import org.eclipse.scout.contacts.client.organization.OrganizationTablePage.Table.NameColumn;
-import org.eclipse.scout.contacts.client.organization.OrganizationTablePage.Table.OrganizationIdColumn;
 import org.eclipse.scout.contacts.shared.organization.IOrganizationService;
 import org.eclipse.scout.contacts.shared.organization.OrganizationTablePageData;
 import org.eclipse.scout.rt.client.dto.Data;

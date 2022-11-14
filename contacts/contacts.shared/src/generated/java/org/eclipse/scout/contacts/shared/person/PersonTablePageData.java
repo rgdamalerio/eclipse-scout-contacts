@@ -52,7 +52,7 @@ public class PersonTablePageData extends AbstractTablePageData {
 		private static final long serialVersionUID = 1L;
 		public static final String personId = "personId";
 		public static final String organization = "organization";
-		public static final String eamil = "eamil";
+		public static final String email = "email";
 		public static final String mobile = "mobile";
 		public static final String phone = "phone";
 		public static final String country = "country";
@@ -61,7 +61,7 @@ public class PersonTablePageData extends AbstractTablePageData {
 		public static final String firstName = "firstName";
 		private String m_personId;
 		private String m_organization;
-		private String m_eamil;
+		private String m_email;
 		private String m_mobile;
 		private String m_phone;
 		private String m_country;
@@ -85,12 +85,12 @@ public class PersonTablePageData extends AbstractTablePageData {
 			m_organization = newOrganization;
 		}
 
-		public String getEamil() {
-			return m_eamil;
+		public String getEmail() {
+			return m_email;
 		}
 
-		public void setEamil(String newEamil) {
-			m_eamil = newEamil;
+		public void setEmail(String newEmail) {
+			m_email = newEmail;
 		}
 
 		public String getMobile() {
