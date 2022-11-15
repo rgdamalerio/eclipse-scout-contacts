@@ -1,9 +1,8 @@
 package org.eclipse.scout.contacts.client.person;
 
-import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.CancelButton;
-import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GroupBox;
-import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.OkButton;
+import org.eclipse.scout.contacts.shared.Icons;
 import org.eclipse.scout.contacts.shared.person.CreatePersonPermission;
+import org.eclipse.scout.contacts.shared.person.GenderCodeType;
 import org.eclipse.scout.contacts.shared.person.IPersonService;
 import org.eclipse.scout.contacts.shared.person.PersonFormData;
 import org.eclipse.scout.contacts.shared.person.UpdatePersonPermission;
@@ -13,12 +12,17 @@ import org.eclipse.scout.rt.client.ui.form.AbstractFormHandler;
 import org.eclipse.scout.rt.client.ui.form.IForm;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractCancelButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractOkButton;
+import org.eclipse.scout.rt.client.ui.form.fields.datefield.AbstractDateField;
 import org.eclipse.scout.rt.client.ui.form.fields.groupbox.AbstractGroupBox;
+import org.eclipse.scout.rt.client.ui.form.fields.imagefield.AbstractImageField;
+import org.eclipse.scout.rt.client.ui.form.fields.radiobuttongroup.AbstractRadioButtonGroup;
+import org.eclipse.scout.rt.client.ui.form.fields.stringfield.AbstractStringField;
 import org.eclipse.scout.rt.client.ui.form.fields.tabbox.AbstractTabBox;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.Order;
 import org.eclipse.scout.rt.platform.classid.ClassId;
 import org.eclipse.scout.rt.platform.text.TEXTS;
+import org.eclipse.scout.rt.shared.services.common.code.ICodeType;
 
 @FormData(value = PersonFormData.class, sdkCommand = FormData.SdkCommand.CREATE)
 public class PersonForm extends AbstractForm {
@@ -52,28 +56,126 @@ public class PersonForm extends AbstractForm {
 		return TEXTS.get("Person");
 	}
 
-	public MainBox getMainBox() {
-		return getFieldByClass(MainBox.class);
-	}
-
-	public GroupBox getGroupBox() {
-		return getFieldByClass(GroupBox.class);
-	}
-
-	public OkButton getOkButton() {
-		return getFieldByClass(OkButton.class);
-	}
-
-	public CancelButton getCancelButton() {
-		return getFieldByClass(CancelButton.class);
-	}
+//	public MainBox getMainBox() {
+//		return getFieldByClass(MainBox.class);
+//	}
+//
+//	public GroupBox getGroupBox() {
+//		return getFieldByClass(GroupBox.class);
+//	}
+//
+//	public OkButton getOkButton() {
+//		return getFieldByClass(OkButton.class);
+//	}
+//
+//	public CancelButton getCancelButton() {
+//		return getFieldByClass(CancelButton.class);
+//	}
 
 	@Order(1000)
 	public class MainBox extends AbstractGroupBox {
+//		@Order(1000)
+//		public class GroupBox extends AbstractGroupBox {
+//
+//		}
 
 		@Order(10)
 		@ClassId("08832a97-8845-4ff4-8dfd-c29366c22742")
 		public class GeneralBox extends AbstractGroupBox {
+			@Order(10)
+			@ClassId("617ffd40-0d69-4d02-b4f8-90c28c68c6ce")
+			public class PictureUrlField extends AbstractStringField {
+
+				@Override
+				protected boolean getConfiguredVisible() {
+					return false;
+				}
+			}
+
+			@Order(20)
+			@ClassId("6366a23e-f8ba-4b50-b814-202e63daffc8")
+			public class PictureField extends AbstractImageField {
+
+				@Override
+				protected Class<PictureUrlField> getConfiguredMasterField() {
+					return PictureUrlField.class;
+				}
+
+				@Override
+				protected void execChangedMasterValue(Object newMasterValue) {
+					updateImage((String) newMasterValue);
+				}
+
+				@Override
+				protected boolean getConfiguredLabelVisible() {
+					return false;
+				}
+
+				@Override
+				protected int getConfiguredGridH() {
+					return 5;
+				}
+
+				@Override
+				protected boolean getConfiguredAutoFit() {
+					return true;
+				}
+
+				@Override
+				protected String getConfiguredImageId() {
+					return Icons.PersonSolid;
+				}
+
+				protected void updateImage(String url) {
+					setImageUrl(url);
+				}
+			}
+
+			@Order(30)
+			@ClassId("359be835-439f-456e-9b0d-c832b034a298")
+			public class FirstNameField extends AbstractStringField {
+
+				@Override
+				protected String getConfiguredLabel() {
+					return TEXTS.get("FirstName");
+				}
+			}
+
+			@Order(40)
+			@ClassId("8679ade5-21fb-470e-8f00-13bd15199101")
+			public class LastNameField extends AbstractStringField {
+
+				@Override
+				protected String getConfiguredLabel() {
+					return TEXTS.get("LastName");
+				}
+			}
+
+			@Order(50)
+			@ClassId("7c602360-9daa-44b8-abb6-94ccf9b9db59")
+			public class DateOfBirthField extends AbstractDateField {
+
+				@Override
+				protected String getConfiguredLabel() {
+					return TEXTS.get("DateOfBirth");
+				}
+			}
+
+			@Order(60)
+			@ClassId("b9d0593e-3938-4f97-bdca-fdb6a1ce1d77")
+			public class GenderGroup extends AbstractRadioButtonGroup<String> {
+
+				@Override
+				protected String getConfiguredLabel() {
+					return TEXTS.get("Gender");
+				}
+
+				@Override
+				protected Class<? extends ICodeType<?, String>> getConfiguredCodeType() {
+					return GenderCodeType.class;
+				}
+			}
+
 		}
 
 		@Order(20)
@@ -99,11 +201,6 @@ public class PersonForm extends AbstractForm {
 			@ClassId("fcb5b155-2c89-4ef8-9a96-ac41e9032107")
 			public class NotesBox extends AbstractGroupBox {
 			}
-		}
-
-		@Order(1000)
-		public class GroupBox extends AbstractGroupBox {
-
 		}
 
 		@Order(2000)
