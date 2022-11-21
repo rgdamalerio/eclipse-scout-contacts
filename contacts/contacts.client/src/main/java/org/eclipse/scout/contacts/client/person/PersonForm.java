@@ -3,6 +3,9 @@ package org.eclipse.scout.contacts.client.person;
 import java.util.regex.Pattern;
 
 import org.eclipse.scout.contacts.client.common.CountryLookupCall;
+import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.AddressBox.LocationBox.CityField;
+import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.AddressBox.LocationBox.CountryField;
+import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.AddressBox.StreetField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.EmailField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.MobileField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.PhoneField;
@@ -109,6 +112,18 @@ public class PersonForm extends AbstractForm {
 		return getFieldByClass(GenderGroup.class);
 	}
 
+	public StreetField getStreetField() {
+		return getFieldByClass(StreetField.class);
+	}
+
+	public CityField getCityField() {
+		return getFieldByClass(CityField.class);
+	}
+
+	public CountryField getCountryField() {
+		return getFieldByClass(CountryField.class);
+	}
+
 	public OrganizationField getOrganizationField() {
 		return getFieldByClass(OrganizationField.class);
 	}
@@ -119,14 +134,6 @@ public class PersonForm extends AbstractForm {
 
 	public MainBox getMainBox() {
 		return getFieldByClass(MainBox.class);
-	}
-
-	public OkButton getOkButton() {
-		return getFieldByClass(OkButton.class);
-	}
-
-	public CancelButton getCancelButton() {
-		return getFieldByClass(CancelButton.class);
 	}
 
 	@Order(1000)
@@ -277,13 +284,30 @@ public class PersonForm extends AbstractForm {
 					}
 
 					@Order(10)
-					@ClassId("a9137ad1-af9d-4fef-a69d-3e3d9ce48f21")
 					public class StreetField extends AbstractStringField {
-
 						@Override
 						protected String getConfiguredLabel() {
 							return TEXTS.get("Street");
 						}
+
+						@Override
+						protected int getConfiguredMaxLength() {
+							return 128;
+						}
+
+						@Override
+						protected void execChangedValue() {
+							// TODO Auto-generated method stub
+							validateAddressFields();
+						}
+					}
+
+					protected void validateAddressFields() {
+						boolean hasStreet = StringUtility.hasText(getStreetField().getValue());
+						boolean hasCity = StringUtility.hasText(getCityField().getValue());
+
+						getCityField().setMandatory(hasStreet);
+						getCountryField().setMandatory(hasStreet || hasCity);
 					}
 
 					// use a sequence box for horizontal layout
@@ -301,25 +325,33 @@ public class PersonForm extends AbstractForm {
 							return false;
 						}
 
-						@Order(10)
-						@ClassId("3ea6ac2a-976e-4c7f-b04b-ec0d7d1ae5ec")
+						@Order(-1000)
 						public class CityField extends AbstractStringField {
-
 							@Override
 							protected String getConfiguredLabel() {
 								return TEXTS.get("City");
 							}
 
 							@Override
+							protected int getConfiguredMaxLength() {
+								return 128;
+							}
+
+							@Override
 							protected byte getConfiguredLabelPosition() {
+								// TODO Auto-generated method stub
 								return LABEL_POSITION_ON_FIELD;
+							}
+
+							@Override
+							protected void execChangedValue() {
+								// TODO Auto-generated method stub
+								validateAddressFields();
 							}
 						}
 
 						@Order(20)
-						@ClassId("d4dfce4f-019b-4a61-ba78-347ef67cf80f")
 						public class CountryField extends AbstractSmartField<String> {
-
 							@Override
 							protected String getConfiguredLabel() {
 								return TEXTS.get("Country");
@@ -327,14 +359,23 @@ public class PersonForm extends AbstractForm {
 
 							@Override
 							protected byte getConfiguredLabelPosition() {
+								// TODO Auto-generated method stub
 								return LABEL_POSITION_ON_FIELD;
 							}
 
 							@Override
+							protected void execChangedValue() {
+								// TODO Auto-generated method stub
+								validateAddressFields();
+							}
+
+							@Override
 							protected Class<? extends ILookupCall<String>> getConfiguredLookupCall() {
+								// TODO Auto-generated method stub
 								return CountryLookupCall.class;
 							}
 						}
+
 					}
 				}
 
@@ -483,16 +524,16 @@ public class PersonForm extends AbstractForm {
 				}
 			}
 		}
-	}
 
-	@Order(2000)
-	public class OkButton extends AbstractOkButton {
+		@Order(2000)
+		public class OkButton extends AbstractOkButton {
 
-	}
+		}
 
-	@Order(3000)
-	public class CancelButton extends AbstractCancelButton {
+		@Order(3000)
+		public class CancelButton extends AbstractCancelButton {
 
+		}
 	}
 
 	public void startModify() {

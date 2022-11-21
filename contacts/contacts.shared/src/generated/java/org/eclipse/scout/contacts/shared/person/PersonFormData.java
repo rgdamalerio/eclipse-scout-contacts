@@ -100,12 +100,10 @@ public class PersonFormData extends AbstractFormData {
 		return getFieldByClass(Street.class);
 	}
 
-	@ClassId("3ea6ac2a-976e-4c7f-b04b-ec0d7d1ae5ec-formdata")
 	public static class City extends AbstractValueFieldData<String> {
 		private static final long serialVersionUID = 1L;
 	}
 
-	@ClassId("d4dfce4f-019b-4a61-ba78-347ef67cf80f-formdata")
 	public static class Country extends AbstractValueFieldData<String> {
 		private static final long serialVersionUID = 1L;
 	}
@@ -168,7 +166,6 @@ public class PersonFormData extends AbstractFormData {
 		private static final long serialVersionUID = 1L;
 	}
 
-	@ClassId("a9137ad1-af9d-4fef-a69d-3e3d9ce48f21-formdata")
 	public static class Street extends AbstractValueFieldData<String> {
 		private static final long serialVersionUID = 1L;
 	}
