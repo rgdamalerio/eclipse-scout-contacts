@@ -47,6 +47,25 @@ import org.eclipse.scout.rt.shared.services.lookup.ILookupCall;
 @FormData(value = PersonFormData.class, sdkCommand = FormData.SdkCommand.CREATE)
 public class PersonForm extends AbstractForm {
 
+	@Override
+	protected boolean execValidate() {
+		// TODO Auto-generated method stub
+		boolean noFirstName = StringUtility.isNullOrEmpty(getFirstNameField().getValue());
+		boolean noLastName = StringUtility.isNullOrEmpty(getLastNameField().getValue());
+
+		if (noFirstName) {
+			getFirstNameField().requestFocus();
+
+			throw new VetoException(TEXTS.get("MisingFirstName"));
+		}
+		if (noLastName) {
+			getLastNameField().requestFocus();
+
+			throw new VetoException(TEXTS.get("MisingLastName"));
+		}
+		return true;
+	}
+
 	// represents the person's primary key
 	private String personId;
 
