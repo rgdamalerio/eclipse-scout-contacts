@@ -2,6 +2,7 @@ package org.eclipse.scout.contacts.client.person;
 
 import java.util.regex.Pattern;
 
+import org.eclipse.scout.contacts.client.common.AbstractUrlImageField;
 import org.eclipse.scout.contacts.client.common.CountryLookupCall;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.AddressBox.LocationBox.CityField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.AddressBox.LocationBox.CountryField;
@@ -17,7 +18,6 @@ import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox.Da
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox.FirstNameField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox.GenderGroup;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox.LastNameField;
-import org.eclipse.scout.contacts.shared.Icons;
 import org.eclipse.scout.contacts.shared.person.GenderCodeType;
 import org.eclipse.scout.contacts.shared.person.IPersonService;
 import org.eclipse.scout.contacts.shared.person.PersonFormData;
@@ -29,7 +29,6 @@ import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractCancelButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractOkButton;
 import org.eclipse.scout.rt.client.ui.form.fields.datefield.AbstractDateField;
 import org.eclipse.scout.rt.client.ui.form.fields.groupbox.AbstractGroupBox;
-import org.eclipse.scout.rt.client.ui.form.fields.imagefield.AbstractImageField;
 import org.eclipse.scout.rt.client.ui.form.fields.radiobuttongroup.AbstractRadioButtonGroup;
 import org.eclipse.scout.rt.client.ui.form.fields.sequencebox.AbstractSequenceBox;
 import org.eclipse.scout.rt.client.ui.form.fields.smartfield.AbstractSmartField;
@@ -178,44 +177,25 @@ public class PersonForm extends AbstractForm {
 
 			@Order(20)
 			@ClassId("6366a23e-f8ba-4b50-b814-202e63daffc8")
-			public class PictureField extends AbstractImageField {
+			public class PictureField extends AbstractUrlImageField {
 
-				@Override
-				protected Class<PictureUrlField> getConfiguredMasterField() {
-					return PictureUrlField.class;
-				}
-
-				@Override
-				protected void execChangedMasterValue(Object newMasterValue) {
-					updateImage((String) newMasterValue);
-				}
-
-				@Override
-				protected boolean getConfiguredLabelVisible() {
-					return false;
-				}
-
-				@Override
-				protected int getConfiguredGridH() {
-					return 5;
-				}
-
-				@Override
-				protected boolean getConfiguredAutoFit() {
-					return true;
-				}
-
-				@Override
-				protected String getConfiguredImageId() {
-					return Icons.PersonSolid;
-				}
-
-				protected void updateImage(String url) {
-					setImageUrl(url);
-				}
 			}
 
 			@Order(30)
+			public class GenderGroup extends AbstractRadioButtonGroup<String> {
+
+				@Override
+				protected String getConfiguredLabel() {
+					return TEXTS.get("Gender");
+				}
+
+				@Override
+				protected Class<? extends ICodeType<?, String>> getConfiguredCodeType() {
+					return GenderCodeType.class;
+				}
+			}
+
+			@Order(40)
 			public class FirstNameField extends AbstractStringField {
 				@Override
 				protected String getConfiguredLabel() {
@@ -228,7 +208,7 @@ public class PersonForm extends AbstractForm {
 				}
 			}
 
-			@Order(40)
+			@Order(50)
 			public class LastNameField extends AbstractStringField {
 				@Override
 				protected String getConfiguredLabel() {
@@ -241,25 +221,11 @@ public class PersonForm extends AbstractForm {
 				}
 			}
 
-			@Order(50)
+			@Order(60)
 			public class DateOfBirthField extends AbstractDateField {
 				@Override
 				protected String getConfiguredLabel() {
 					return TEXTS.get("DateOfBirth");
-				}
-			}
-
-			@Order(2000)
-			public class GenderGroup extends AbstractRadioButtonGroup<String> {
-
-				@Override
-				protected String getConfiguredLabel() {
-					return TEXTS.get("Gender");
-				}
-
-				@Override
-				protected Class<? extends ICodeType<?, String>> getConfiguredCodeType() {
-					return GenderCodeType.class;
 				}
 			}
 
