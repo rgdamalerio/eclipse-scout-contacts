@@ -33,7 +33,7 @@ public class Desktop extends AbstractDesktop {
 
 	@Override
 	protected String getConfiguredLogoId() {
-		return Icons.AppLogo;
+		return "application_logo";
 	}
 
 	@Override

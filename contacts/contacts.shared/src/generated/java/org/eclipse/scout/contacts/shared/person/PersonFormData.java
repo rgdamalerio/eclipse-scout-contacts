@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.annotation.Generated;
 
+import org.eclipse.scout.contacts.shared.common.AbstractEmailFieldData;
 import org.eclipse.scout.contacts.shared.common.AbstractUrlImageFieldData;
 import org.eclipse.scout.rt.platform.classid.ClassId;
 import org.eclipse.scout.rt.shared.data.form.AbstractFormData;
@@ -117,7 +118,7 @@ public class PersonFormData extends AbstractFormData {
 		private static final long serialVersionUID = 1L;
 	}
 
-	public static class Email extends AbstractValueFieldData<String> {
+	public static class Email extends AbstractEmailFieldData {
 		private static final long serialVersionUID = 1L;
 	}
 
