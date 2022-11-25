@@ -1,18 +1,17 @@
 package org.eclipse.scout.contacts.client.person;
 
+import org.eclipse.scout.contacts.client.common.AbstractAddressBox;
 import org.eclipse.scout.contacts.client.common.AbstractEmailField;
+import org.eclipse.scout.contacts.client.common.AbstractNotesBox;
 import org.eclipse.scout.contacts.client.common.AbstractUrlImageField;
-import org.eclipse.scout.contacts.client.common.CountryLookupCall;
-import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.AddressBox.LocationBox.CityField;
-import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.AddressBox.LocationBox.CountryField;
-import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.AddressBox.StreetField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.EmailField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.MobileField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.PhoneField;
-import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.WorkBox.EmailWorkField;
+import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.NotesBox;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.WorkBox.OrganizationField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.WorkBox.PhoneWorkField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.WorkBox.PositionField;
+import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.WorkBox.WorkEmailField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox.DateOfBirthField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox.FirstNameField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox.GenderGroup;
@@ -29,8 +28,6 @@ import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractOkButton;
 import org.eclipse.scout.rt.client.ui.form.fields.datefield.AbstractDateField;
 import org.eclipse.scout.rt.client.ui.form.fields.groupbox.AbstractGroupBox;
 import org.eclipse.scout.rt.client.ui.form.fields.radiobuttongroup.AbstractRadioButtonGroup;
-import org.eclipse.scout.rt.client.ui.form.fields.sequencebox.AbstractSequenceBox;
-import org.eclipse.scout.rt.client.ui.form.fields.smartfield.AbstractSmartField;
 import org.eclipse.scout.rt.client.ui.form.fields.stringfield.AbstractStringField;
 import org.eclipse.scout.rt.client.ui.form.fields.tabbox.AbstractTabBox;
 import org.eclipse.scout.rt.platform.BEANS;
@@ -40,7 +37,6 @@ import org.eclipse.scout.rt.platform.exception.VetoException;
 import org.eclipse.scout.rt.platform.text.TEXTS;
 import org.eclipse.scout.rt.platform.util.StringUtility;
 import org.eclipse.scout.rt.shared.services.common.code.ICodeType;
-import org.eclipse.scout.rt.shared.services.lookup.ILookupCall;
 
 @FormData(value = PersonFormData.class, sdkCommand = FormData.SdkCommand.CREATE)
 public class PersonForm extends AbstractForm {
@@ -109,10 +105,6 @@ public class PersonForm extends AbstractForm {
 		return getFieldByClass(PhoneWorkField.class);
 	}
 
-	public EmailWorkField getEmailWorkField() {
-		return getFieldByClass(EmailWorkField.class);
-	}
-
 	public FirstNameField getFirstNameField() {
 		return getFieldByClass(FirstNameField.class);
 	}
@@ -129,16 +121,12 @@ public class PersonForm extends AbstractForm {
 		return getFieldByClass(GenderGroup.class);
 	}
 
-	public StreetField getStreetField() {
-		return getFieldByClass(StreetField.class);
+	public WorkEmailField getWorkEmailField() {
+		return getFieldByClass(WorkEmailField.class);
 	}
 
-	public CityField getCityField() {
-		return getFieldByClass(CityField.class);
-	}
-
-	public CountryField getCountryField() {
-		return getFieldByClass(CountryField.class);
+	public NotesBox getNotesBox() {
+		return getFieldByClass(NotesBox.class);
 	}
 
 	public OrganizationField getOrganizationField() {
@@ -245,122 +233,8 @@ public class PersonForm extends AbstractForm {
 
 				@Order(10)
 				@ClassId("736450dd-ba89-43cd-ba52-bcd31196b462")
-				public class AddressBox extends AbstractGroupBox {
+				public class AddressBox extends AbstractAddressBox {
 
-					@Override
-					protected boolean getConfiguredBorderVisible() {
-						return false;
-					}
-
-					@Override
-					protected int getConfiguredGridH() {
-						return 3;
-					}
-
-					@Override
-					protected int getConfiguredGridW() {
-						return 1;
-					}
-
-					@Override
-					protected int getConfiguredGridColumnCount() {
-						return 1;
-					}
-
-					@Order(10)
-					public class StreetField extends AbstractStringField {
-						@Override
-						protected String getConfiguredLabel() {
-							return TEXTS.get("Street");
-						}
-
-						@Override
-						protected int getConfiguredMaxLength() {
-							return 128;
-						}
-
-						@Override
-						protected void execChangedValue() {
-							// TODO Auto-generated method stub
-							validateAddressFields();
-						}
-					}
-
-					protected void validateAddressFields() {
-						boolean hasStreet = StringUtility.hasText(getStreetField().getValue());
-						boolean hasCity = StringUtility.hasText(getCityField().getValue());
-
-						getCityField().setMandatory(hasStreet);
-						getCountryField().setMandatory(hasStreet || hasCity);
-					}
-
-					// use a sequence box for horizontal layout
-					@Order(20)
-					@ClassId("a278333c-057e-4c1d-a442-0c1dd62fdca7")
-					public class LocationBox extends AbstractSequenceBox {
-
-						@Override
-						protected String getConfiguredLabel() {
-							return TEXTS.get("Location");
-						}
-
-						@Override
-						protected boolean getConfiguredAutoCheckFromTo() {
-							return false;
-						}
-
-						@Order(-1000)
-						public class CityField extends AbstractStringField {
-							@Override
-							protected String getConfiguredLabel() {
-								return TEXTS.get("City");
-							}
-
-							@Override
-							protected int getConfiguredMaxLength() {
-								return 128;
-							}
-
-							@Override
-							protected byte getConfiguredLabelPosition() {
-								// TODO Auto-generated method stub
-								return LABEL_POSITION_ON_FIELD;
-							}
-
-							@Override
-							protected void execChangedValue() {
-								// TODO Auto-generated method stub
-								validateAddressFields();
-							}
-						}
-
-						@Order(20)
-						public class CountryField extends AbstractSmartField<String> {
-							@Override
-							protected String getConfiguredLabel() {
-								return TEXTS.get("Country");
-							}
-
-							@Override
-							protected byte getConfiguredLabelPosition() {
-								// TODO Auto-generated method stub
-								return LABEL_POSITION_ON_FIELD;
-							}
-
-							@Override
-							protected void execChangedValue() {
-								// TODO Auto-generated method stub
-								validateAddressFields();
-							}
-
-							@Override
-							protected Class<? extends ILookupCall<String>> getConfiguredLookupCall() {
-								// TODO Auto-generated method stub
-								return CountryLookupCall.class;
-							}
-						}
-
-					}
 				}
 
 				@Order(2000)
@@ -444,48 +318,17 @@ public class PersonForm extends AbstractForm {
 				}
 
 				@Order(4000)
-				public class EmailWorkField extends AbstractStringField {
-					@Override
-					protected String getConfiguredLabel() {
-						return TEXTS.get("EmailWork");
-					}
+				public class WorkEmailField extends AbstractEmailField {
 
-					@Override
-					protected int getConfiguredMaxLength() {
-						return 128;
-					}
 				}
 
 			}
 
-			@Order(30)
-			@ClassId("fcb5b155-2c89-4ef8-9a96-ac41e9032107")
-			public class NotesBox extends AbstractGroupBox {
-				@Override
-				protected String getConfiguredLabel() {
-					return TEXTS.get("Notes");
-				}
+			@Order(2000)
+			public class NotesBox extends AbstractNotesBox {
 
-				@Order(10)
-				@ClassId("ce791f14-fca6-4f11-8476-89cbf905eb2e")
-				public class NotesField extends AbstractStringField {
-
-					@Override
-					protected int getConfiguredGridH() {
-						return 4;
-					}
-
-					@Override
-					protected boolean getConfiguredLabelVisible() {
-						return false;
-					}
-
-					@Override
-					protected boolean getConfiguredMultilineText() {
-						return true;
-					}
-				}
 			}
+
 		}
 
 		@Order(2000)
@@ -508,15 +351,6 @@ public class PersonForm extends AbstractForm {
 	}
 
 	public class NewHandler extends AbstractFormHandler {
-//		@Override
-//		protected void execLoad() {
-//			PersonFormData formData = new PersonFormData();
-//			exportFormData(formData);
-//			formData = BEANS.get(IPersonService.class).prepareCreate(formData);
-//			importFormData(formData);
-//
-//			setEnabledPermission(new CreatePersonPermission());
-//		}
 
 		@Override
 		protected void execStore() {
@@ -531,12 +365,6 @@ public class PersonForm extends AbstractForm {
 	public class ModifyHandler extends AbstractFormHandler {
 		@Override
 		protected void execLoad() {
-//			PersonFormData formData = new PersonFormData();
-//			exportFormData(formData);
-//			formData = BEANS.get(IPersonService.class).load(formData);
-//			importFormData(formData);
-//
-//			setEnabledPermission(new UpdatePersonPermission());
 
 			IPersonService service = BEANS.get(IPersonService.class);
 			PersonFormData formData = new PersonFormData();
@@ -549,10 +377,6 @@ public class PersonForm extends AbstractForm {
 
 		@Override
 		protected void execStore() {
-//			PersonFormData formData = new PersonFormData();
-//			exportFormData(formData);
-//			formData = BEANS.get(IPersonService.class).store(formData);
-//			importFormData(formData);
 
 			IPersonService service = BEANS.get(IPersonService.class);
 			PersonFormData formData = new PersonFormData();

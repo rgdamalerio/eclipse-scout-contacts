@@ -53,7 +53,7 @@ public abstract class AbstractUrlImageField extends AbstractImageField {
 	@Override
 	protected String getConfiguredImageId() {
 		// TODO Auto-generated method stub
-		return Icons.PersonSolid;
+		return Icons.User;
 	}
 
 	protected void updateImage() {
