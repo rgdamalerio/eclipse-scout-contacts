@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.eclipse.scout.contacts.client.common.CountryLookupCall;
 import org.eclipse.scout.contacts.client.person.PersonTablePage.Table;
+import org.eclipse.scout.contacts.shared.organization.OrganizationLookupCall;
 import org.eclipse.scout.contacts.shared.person.IPersonService;
 import org.eclipse.scout.contacts.shared.person.PersonTablePageData;
 import org.eclipse.scout.rt.client.dto.Data;
@@ -137,15 +138,15 @@ public class PersonTablePage extends AbstractPageWithTable<Table> {
 		}
 
 		@Order(1)
-		public class OrganizationColumn extends AbstractStringColumn {
+		public class OrganizationColumn extends AbstractSmartColumn<String> {
 			@Override
 			protected String getConfiguredHeaderText() {
 				return TEXTS.get("Organization");
 			}
 
 			@Override
-			protected int getConfiguredWidth() {
-				return 100;
+			protected Class<? extends ILookupCall<String>> getConfiguredLookupCall() {
+				return OrganizationLookupCall.class;
 			}
 		}
 

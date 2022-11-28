@@ -1,14 +1,15 @@
 package org.eclipse.scout.contacts.client.organization;
 
+import org.eclipse.scout.contacts.client.common.AbstractAddressBox;
 import org.eclipse.scout.contacts.client.common.AbstractEmailField;
 import org.eclipse.scout.contacts.client.common.AbstractNotesBox;
 import org.eclipse.scout.contacts.client.common.AbstractUrlImageField;
 import org.eclipse.scout.contacts.client.organization.OrganizationForm.MainBox.CancelButton;
 import org.eclipse.scout.contacts.client.organization.OrganizationForm.MainBox.OkButton;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox;
-import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.PhoneField;
+import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox.PictureField;
 import org.eclipse.scout.contacts.shared.organization.IOrganizationService;
 import org.eclipse.scout.contacts.shared.organization.OrganizationFormData;
@@ -146,21 +147,21 @@ public class OrganizationForm extends AbstractForm {
 				}
 
 				@Order(1000)
-				public class AddressBox extends AbstractGroupBox {
+				public class AddressBox extends AbstractAddressBox {
 
 				}
 
 				@Order(2000)
+				public class EmailField extends AbstractEmailField {
+
+				}
+
+				@Order(3000)
 				public class PhoneField extends AbstractStringField {
 					@Override
 					protected String getConfiguredLabel() {
 						return TEXTS.get("Phone");
 					}
-
-				}
-
-				@Order(3000)
-				public class EmailField extends AbstractEmailField {
 
 				}
 

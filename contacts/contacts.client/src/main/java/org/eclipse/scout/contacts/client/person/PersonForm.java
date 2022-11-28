@@ -8,14 +8,15 @@ import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.Co
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.MobileField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.PhoneField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.NotesBox;
+import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.WorkBox.EmailWorkField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.WorkBox.OrganizationField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.WorkBox.PhoneWorkField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.WorkBox.PositionField;
-import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.DetailsBox.WorkBox.WorkEmailField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox.DateOfBirthField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox.FirstNameField;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox.GenderGroup;
 import org.eclipse.scout.contacts.client.person.PersonForm.MainBox.GeneralBox.LastNameField;
+import org.eclipse.scout.contacts.shared.organization.OrganizationLookupCall;
 import org.eclipse.scout.contacts.shared.person.GenderCodeType;
 import org.eclipse.scout.contacts.shared.person.IPersonService;
 import org.eclipse.scout.contacts.shared.person.PersonFormData;
@@ -28,6 +29,7 @@ import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractOkButton;
 import org.eclipse.scout.rt.client.ui.form.fields.datefield.AbstractDateField;
 import org.eclipse.scout.rt.client.ui.form.fields.groupbox.AbstractGroupBox;
 import org.eclipse.scout.rt.client.ui.form.fields.radiobuttongroup.AbstractRadioButtonGroup;
+import org.eclipse.scout.rt.client.ui.form.fields.smartfield.AbstractSmartField;
 import org.eclipse.scout.rt.client.ui.form.fields.stringfield.AbstractStringField;
 import org.eclipse.scout.rt.client.ui.form.fields.tabbox.AbstractTabBox;
 import org.eclipse.scout.rt.platform.BEANS;
@@ -37,6 +39,7 @@ import org.eclipse.scout.rt.platform.exception.VetoException;
 import org.eclipse.scout.rt.platform.text.TEXTS;
 import org.eclipse.scout.rt.platform.util.StringUtility;
 import org.eclipse.scout.rt.shared.services.common.code.ICodeType;
+import org.eclipse.scout.rt.shared.services.lookup.ILookupCall;
 
 @FormData(value = PersonFormData.class, sdkCommand = FormData.SdkCommand.CREATE)
 public class PersonForm extends AbstractForm {
@@ -121,8 +124,8 @@ public class PersonForm extends AbstractForm {
 		return getFieldByClass(GenderGroup.class);
 	}
 
-	public WorkEmailField getWorkEmailField() {
-		return getFieldByClass(WorkEmailField.class);
+	public EmailWorkField getEmailWorkField() {
+		return getFieldByClass(EmailWorkField.class);
 	}
 
 	public NotesBox getNotesBox() {
@@ -292,15 +295,15 @@ public class PersonForm extends AbstractForm {
 				}
 
 				@Order(2000)
-				public class OrganizationField extends AbstractStringField {
+				public class OrganizationField extends AbstractSmartField<String> {
 					@Override
 					protected String getConfiguredLabel() {
 						return TEXTS.get("Organization");
 					}
 
 					@Override
-					protected int getConfiguredMaxLength() {
-						return 128;
+					protected Class<? extends ILookupCall<String>> getConfiguredLookupCall() {
+						return OrganizationLookupCall.class;
 					}
 				}
 
@@ -318,7 +321,7 @@ public class PersonForm extends AbstractForm {
 				}
 
 				@Order(4000)
-				public class WorkEmailField extends AbstractEmailField {
+				public class EmailWorkField extends AbstractEmailField {
 
 				}
 
@@ -357,7 +360,7 @@ public class PersonForm extends AbstractForm {
 			IPersonService service = BEANS.get(IPersonService.class);
 			PersonFormData formData = new PersonFormData();
 			exportFormData(formData);
-			formData = service.create(formData);
+			formData = service.create(formData); // <7>
 			importFormData(formData);
 		}
 	}
@@ -366,13 +369,13 @@ public class PersonForm extends AbstractForm {
 		@Override
 		protected void execLoad() {
 
-			IPersonService service = BEANS.get(IPersonService.class);
+			IPersonService service = BEANS.get(IPersonService.class); // <1>
 			PersonFormData formData = new PersonFormData();
-			exportFormData(formData);
-			formData = service.load(formData);
-			importFormData(formData);
+			exportFormData(formData); // <2>
+			formData = service.load(formData); // <3>
+			importFormData(formData); // <4>
 
-			getForm().setSubTitle(calculateSubTitle());
+			getForm().setSubTitle(calculateSubTitle()); // <5>
 		}
 
 		@Override
@@ -381,7 +384,7 @@ public class PersonForm extends AbstractForm {
 			IPersonService service = BEANS.get(IPersonService.class);
 			PersonFormData formData = new PersonFormData();
 			exportFormData(formData);
-			service.store(formData);
+			service.store(formData); // <6>
 		}
 	}
 

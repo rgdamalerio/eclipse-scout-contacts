@@ -33,6 +33,10 @@ public class PersonFormData extends AbstractFormData {
 		return getFieldByClass(Email.class);
 	}
 
+	public EmailWork getEmailWork() {
+		return getFieldByClass(EmailWork.class);
+	}
+
 	public FirstName getFirstName() {
 		return getFieldByClass(FirstName.class);
 	}
@@ -95,10 +99,6 @@ public class PersonFormData extends AbstractFormData {
 		return getFieldByClass(Position.class);
 	}
 
-	public WorkEmail getWorkEmail() {
-		return getFieldByClass(WorkEmail.class);
-	}
-
 	@ClassId("736450dd-ba89-43cd-ba52-bcd31196b462-formdata")
 	public static class AddressBox extends AbstractAddressBoxData {
 		private static final long serialVersionUID = 1L;
@@ -109,6 +109,10 @@ public class PersonFormData extends AbstractFormData {
 	}
 
 	public static class Email extends AbstractValueFieldData<String> {
+		private static final long serialVersionUID = 1L;
+	}
+
+	public static class EmailWork extends AbstractValueFieldData<String> {
 		private static final long serialVersionUID = 1L;
 	}
 
@@ -159,10 +163,6 @@ public class PersonFormData extends AbstractFormData {
 	}
 
 	public static class Position extends AbstractValueFieldData<String> {
-		private static final long serialVersionUID = 1L;
-	}
-
-	public static class WorkEmail extends AbstractValueFieldData<String> {
 		private static final long serialVersionUID = 1L;
 	}
 }

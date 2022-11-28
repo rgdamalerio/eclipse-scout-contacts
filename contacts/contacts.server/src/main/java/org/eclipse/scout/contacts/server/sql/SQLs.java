@@ -97,16 +97,18 @@ public interface SQLs {
 			+ "         :lastName, " + "         :picture.url, " + "         :dateOfBirth, " + "         :genderGroup, "
 			+ "         :phone, " + "         :mobile, " + "         :email, " + "         :addressBox.street, "
 			+ "         :addressBox.city, " + "         :addressBox.country, " + "         :position, "
-			+ "         :organization, " + "         :phoneWork, " + "         :emailWork, " + "         :notes";
+			+ "         :organization, " + "         :phoneWork, " + "         :emailWork, "
+			+ "         :notesBox.notes";
 
 	String PERSON_UPDATE = "" + "UPDATE   PERSON " + "SET      first_name = :firstName, "
 			+ "         last_name = :lastName, " + "         picture_url = :picture.url, "
 			+ "         date_of_birth = :dateOfBirth, " + "         gender = :genderGroup, "
 			+ "         phone  = :phone, " + "         mobile = :mobile, " + "         email = :email, "
 			+ "         street = :addressBox.street, " + "         city = :addressBox.city, "
-			+ "         country = :address.country, " + "         position = :position, "
+			+ "         country = :addressBox.country, " + "         position = :position, "
 			+ "         organization_id = :organization, " + "         phone_work = :phoneWork, "
-			+ "         email_work = :emailWork, " + "         notes = :notes " + "WHERE    person_id = :personId";
+			+ "         email_work = :emailWork, " + "         notes = :notesBox.notes "
+			+ "WHERE    person_id = :personId";
 
 	String ORGANIZATION_INSERT_SAMPLE = "" + "INSERT   INTO ORGANIZATION " + "        (organization_id, "
 			+ "         name, " + "         city, " + "         country, " + "         url, " + "         logo_url) ";
